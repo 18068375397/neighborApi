@@ -1,0 +1,87 @@
+project:
+  name: neighbor-api
+spring:
+  profiles:
+    active: local
+  datasource:
+    hikari:
+      connection-timeout: 3000
+      validation-timeout: 3000
+      minimum-idle: 5
+      max-lifetime: 240000
+      maximum-pool-size: 20
+      idle-timeout: 10000
+  jpa:
+    open-in-view: false
+    #DB 대소문자 구분 시 @Table, @Column 에 입력한 name 으로 쿼리 전송 정책, DB가 대소문자 구분 때 추가
+#    hibernate:
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    #Hibernate 6에서는 더 이상 구성 속성을 사용하여 방언을 명시적으로 지정할 필요가 없다.
+    #https://docs.jboss.org/hibernate/orm/6.3/userguide/html_single/Hibernate_User_Guide.html#database-dialect
+#    database-platform: org.hibernate.dialect.OracleDialect
+    #namedNativeQuery 사용 시 추가
+    mapping-resources:
+      - query/namedNativeQuerySample.xml
+
+server:
+  port: 8080
+  error:
+    path: /error
+  servlet:
+    context-path: /neighbor-api
+    encoding:
+      charset: utf-8
+      enabled: true
+      force: true
+springdoc: #https://springdoc.org/properties.html
+  api-docs:
+    path: /api-docs
+#  default-consumes-media-type: application/json
+#  default-produces-media-type: application/json
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+    display-request-duration: true
+    doc-expansion: none #하위 operation 닫은 상태로 초기화
+    display-operation-id: true
+    filter: true
+jwt:
+  auth-key: kr.co.neighbor21
+rsa:
+  key: kr.co.neighbor21
+  keyPair:
+#    path: /Users/kimyonghee/Documents/project/base/neighbor-api/keyPair
+    # 修改测试地址
+    path: /Users/chengjiawei/IdeaProjects/샘플프로젝트/neighbor-api/keyPair
+    algorithm: RSA
+    keySize: 2048
+logging:
+  config: classpath:logback/logback-spring.xml
+
+--- #develop
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    # 修改测试地址
+    url: "jdbc:mariadb://106.54.220.179:3306/API_TEST_DB"
+    driver-class-name: "org.mariadb.jdbc.Driver"
+    username: root
+    password: root
+#    url: "jdbc:mariadb://211.41.186.111:3306/API_TEST_DB"
+#    driver-class-name: "org.mariadb.jdbc.Driver"
+#    username: api_test
+#    password: ENC(j89Cuplv+wScaMuS9CBbicPcGkqVezTq)
+  jpa:
+    show-sql: true
+
+--- #distribution
+
+spring:
+  config:
+    activate:
+      on-profile: real

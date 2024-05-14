@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_2.xsd"
+                 version="2.2">
+    <named-native-query name="M_OP_OPERATOR.findOperator" result-set-mapping="operatorResponse">
+        <query>
+            <![CDATA[
+                SELECT T1.user_id AS userId
+                     , T1.user_name AS userName
+                     , T1.authority_id AS authorityId
+                     , T2.authority_name AS authorityName
+                     , T1.telephone AS telephone
+                     , T1.cellphone AS cellphone
+                     , T1.position AS position
+                     , T1.department AS department
+                     , TO_CHAR(T1.update_date, 'YYYY-MM-DD HH24:MI:SS') AS modifyDate
+                     , CASE T1.use_yn WHEN 'Y' THEN 'true' ELSE 'false' END AS isUse
+                  FROM m_op_operator T1
+                  LEFT JOIN m_op_authority T2 ON (T2.authority_id = T1.authority_id)
+                 WHERE T1.user_id LIKE '%'||:userId||'%'
+                    OR T1.user_name LIKE '%'||:userName||'%'
+            ]]>
+        </query>
+    </named-native-query>
+
+    <sql-result-set-mapping name="operatorResponse">
+        <constructor-result
+                target-class="kr.co.neighbor21.neighborApi.domain.operator.record.OperatorSearchResponse">
+            <column name="userId"/>
+            <column name="userName"/>
+            <column name="authorityId"/>
+            <column name="authorityName"/>
+            <column name="telephone"/>
+            <column name="cellphone"/>
+            <column name="position"/>
+            <column name="department"/>
+            <column name="modifyDate"/>
+            <column name="isUse" class="java.lang.Boolean"/>
+        </constructor-result>
+    </sql-result-set-mapping>
+</entity-mappings>

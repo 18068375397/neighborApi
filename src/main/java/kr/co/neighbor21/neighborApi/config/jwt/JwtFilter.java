@@ -56,17 +56,17 @@ public class JwtFilter extends GenericFilterBean {
         if (!ignoreUris.contains(requestURI) && !requestURI.startsWith("/swagger-") && !requestURI.startsWith("/api-docs")) {
             LOGGER.info("Request URI : '{}', Start to check access token. ▼", requestURI);
             String accessToken = null;
-            /*1. Cookie 에서 Access Token 추출 (NS_AUT)*/
+            /*1. Cookie Extract the access token from (NS_AUT) */
             accessToken = tokenProvider.getTokenFromCookie(httpServletRequest);
             JwtValidDto valid = new JwtValidDto(false, null, accessToken);
-            /*2. Access Token 유효성 체크*/
+            /*2. Access Token Verification check*/
             if (StringUtils.hasText(accessToken)) {
                 checkTokenValidity(valid, httpServletRequest, httpServletResponse);
             }
-            /*3. 중복 로그인인지 체크*/
+            /*3. Check whether it is a duplicate login*/
             if (valid.isValid()) checkDuplicationLogin(valid, httpServletRequest);
-            /*4. Spring security 에 권한 정보 저장
-             * 권한 정보가 없을 경우 JwtAuthenticationEntryPoint 로 전달.(security config 에 설정)*/
+            /*4. Spring security Save permission information to
+             * If there is no permission information, it is forwarded to JwtAuthenticationEntryPoint. (set in security config)*/
             if (valid.isValid()) {
                 LOGGER.info("User's token validation success: '{}'", valid.getUserId());
                 Authentication authentication = tokenProvider.getAuthentication(valid.getAccessToken());

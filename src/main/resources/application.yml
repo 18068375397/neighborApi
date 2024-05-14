@@ -44,7 +44,7 @@ springdoc: #https://springdoc.org/properties.html
     operations-sorter: alpha
     tags-sorter: alpha
     display-request-duration: true
-    doc-expansion: none #하위 operation 닫은 상태로 초기화
+    doc-expansion: none #Initialize the child operation to the off state
     display-operation-id: true
     filter: true
 jwt:
@@ -78,6 +78,10 @@ spring:
 #    password: ENC(j89Cuplv+wScaMuS9CBbicPcGkqVezTq)
   jpa:
     show-sql: true
+    properties:
+      hibernate:
+        use_sql_comments: true
+#        format_sql: true
 
 --- #distribution
 

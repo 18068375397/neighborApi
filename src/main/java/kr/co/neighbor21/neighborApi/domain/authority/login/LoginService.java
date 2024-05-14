@@ -57,14 +57,13 @@ public class LoginService {
             LoginRequest parameter, HttpServletResponse httpServletResponse) {
         String resultCode = messageConfig.getCode("SUCCESS.CODE");
         String resultMsg = messageConfig.getMsg("LOGIN.SUCCESS.MSG");
-        /*1. ID가 존재하는지 체크*/
+        /*1. ID가 Check to see if it exists*/
         M_OP_OPERATOR entity = operatorRepository.findOneByKeyUserId(parameter.id())
                 .orElseThrow(() -> new UnauthorizedException(CommonErrorCode.NO_MATCHING_USER, null));
-        /*2. Password 가 일치하는지 체크*/
+        /*2. Password Check if there is a match*/
         String decryptedPassword;
         decryptedPassword = keyGen.decryptRSA(parameter.password());
         if (decryptedPassword == null) throw new IllegalArgumentException("Failed to decrypt password encrypted with RSA.");
-        System.out.println(encoder.encode(decryptedPassword.trim()));
         if (!encoder.matches(decryptedPassword.trim(), entity.getPassword())) {
             throw new UnauthorizedException(CommonErrorCode.WRONG_PASSWORD, null);
         }

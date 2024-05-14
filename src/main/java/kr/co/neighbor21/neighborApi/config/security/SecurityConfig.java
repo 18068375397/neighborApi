@@ -64,6 +64,7 @@ public class SecurityConfig {
                             .anyRequest().authenticated();
                 }).exceptionHandling(c ->
                         c.authenticationEntryPoint(jwtAuthenticationEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler)
+//              Spring Security does not adopt session mechanism
                 ).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 //                .apply(new JwtSecurityConfig(tokenProvider, messageConfig)); /*spring 6.2 deprecated*/

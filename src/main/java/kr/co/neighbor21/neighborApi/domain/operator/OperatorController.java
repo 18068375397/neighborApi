@@ -31,10 +31,10 @@ public class OperatorController {
     private final OperatorService operatorService;
 
     @PostMapping(value = "/v1/operator/dynamic-search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "운영자 정보 조회 (DynamicSearchRequest 활용 방식)", description = """
+    @Operation(summary = "View operator information (how DynamicSearchRequest is used)", description = """
             # Searchable Fields
-            - userId [운영자 ID]
-            - userName [운영자 명]
+            - userId [userId]
+            - userName [userName]
             """,
             operationId = "API-001-01-1"
     )

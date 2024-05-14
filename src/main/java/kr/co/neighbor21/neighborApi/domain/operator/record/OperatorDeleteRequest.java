@@ -12,7 +12,7 @@ import kr.co.neighbor21.neighborApi.common.validation.annotation.ByteSize;
  */
 @Schema(description = "운영자 삭제 요청")
 public record OperatorDeleteRequest(
-        @Schema(description = "운영자 ID / VARCHAR2(50)", example = "operator01")
+        @Schema(description = "userId / VARCHAR2(50)", example = "test")
         @NotNull
         @ByteSize(max = 50)
         String userId) {

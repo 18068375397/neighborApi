@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "Login request")
 public record LoginRequest(
-        @Schema(description = "login Id", example = "geonlee")
+        @Schema(description = "login Id", example = "test")
         @NotNull
         String id,
         @Schema(description = "Login Password", example = "L3bKaokPyccamcIe7VshaqEicJH1BM8uCfuiHbBdP5LMqyY3KAkyd/mr3TgiOjRquN3UN7C1uR41QjPKA7r5rZ73FGSw/wPbPwKlvFFIVpmPb4YG3MrXq3SRUwT8s2qKa785AowaSXm9V5aEr947RKnQusAaG1IFh3gX0yJSZ4+k23kZMajxT6oe3xxscSLETMiKr2nIP57Ow1dmUXRCmuax4RylSj/w0iPcBSQS9xuSStr5jEMbBE2Yk898VodWJU0mf/Py2Q8IVXOHO62vk8XEurTp2WM+nHLoX3dmiBPHSy8RJxA+GjaNKuW2KXnYLFgE/tCEWbvoVtUZcszklw==")

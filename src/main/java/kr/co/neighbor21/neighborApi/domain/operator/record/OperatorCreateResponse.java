@@ -10,22 +10,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
  */
 @Schema(description = "운영자 추가 응답")
 public record OperatorCreateResponse(
-        @Schema(description = "운영자 ID / VARCHAR2(50)", example = "operator01")
+        @Schema(description = "userId / VARCHAR2(50)", example = "test")
         String userId,
-        @Schema(description = "운영자 명 / VARCHAR2(256)", example = "운영자1")
+        @Schema(description = "userName / VARCHAR2(256)", example = "geonlee")
         String userName,
-        @Schema(description = "권한명 / VARCHAR2(50)", example = "사용자 권한")
+        @Schema(description = "Name of responsibility / VARCHAR2(50)", example = "User permissions")
         String authorityName,
-        @Schema(description = "운영자 전화번호 / VARCHAR2(256)", example = "02-1234-5678")
+        @Schema(description = "telephone / VARCHAR2(256)", example = "02-1234-5678")
         String telephone,
-        @Schema(description = "운영자 휴대전화 / VARCHAR2(256)", example = "010-1234-5678")
+        @Schema(description = "cellphone / VARCHAR2(256)", example = "010-1234-5678")
         String cellphone,
-        @Schema(description = "운영자 직책 / VARCHAR2(30)", example = "연구원")
+        @Schema(description = "position / VARCHAR2(30)", example = "Researcher")
         String position,
-        @Schema(description = "운영자 부서 / VARCHAR2(256)", example = "Meta 기술 개발 센터")
+        @Schema(description = "department / VARCHAR2(256)", example = "Meta Technology Development Center")
         String department,
-        @Schema(description = "수정 일시 / DATE", example = "2024-01-01 00:00:00")
+        @Schema(description = "modifyDate / DATE", example = "2024-01-01 00:00:00")
         String modifyDate,
-        @Schema(description = "사용 여부 / VARCHAR2(1)", example = "true")
+        @Schema(description = "isUse / VARCHAR2(1)", example = "true")
         Boolean isUse) {
 }

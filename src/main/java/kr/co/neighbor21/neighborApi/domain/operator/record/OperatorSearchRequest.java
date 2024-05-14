@@ -12,11 +12,11 @@ import kr.co.neighbor21.neighborApi.common.validation.annotation.ByteSize;
  */
 @Schema(description = "운영자 조회 요청")
 public record OperatorSearchRequest(
-        @Schema(description = "운영자 ID / VARCHAR2(50)", example = "geonlee")
+        @Schema(description = "userId / VARCHAR2(50)", example = "test")
         @NotNull
         @ByteSize(max = 50)
         String userId,
-        @Schema(description = "운영자 명 / VARCHAR2(256)", example = "이건")
+        @Schema(description = "userName / VARCHAR2(256)", example = "geonlee")
         @ByteSize(max = 256)
         String userName) {
 }

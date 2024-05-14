@@ -12,8 +12,8 @@ import lombok.Builder;
 @Builder
 @Schema(description = "로그아웃 응답")
 public record LogoutResponse(
-        @Schema(description = "응답 코드", example = "NS_OK")
+        @Schema(description = "Response code", example = "NS_OK")
         String status,
-        @Schema(description = "응답 메시지", example = "로그아웃 하였습니다.")
+        @Schema(description = "Response message", example = "I signed off.")
         String message) {
 }

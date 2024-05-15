@@ -56,7 +56,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UnauthorizedException(CommonErrorCode.FORBIDDEN, null);
         }
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(oprEntity.getAuthority().getAuthorityCode()));
+        grantedAuthorities.add(new SimpleGrantedAuthority(oprEntity.getAuthority().getKey().getAuthorityId()));
         LOGGER.info(userId + " / Authority : {}", grantedAuthorities);
         return new User(
                 oprEntity.getKey().getUserId(),

@@ -6,9 +6,9 @@ import kr.co.neighbor21.neighborApi.config.jwt.JwtAuthenticationEntryPoint;
 import kr.co.neighbor21.neighborApi.config.jwt.JwtFilter;
 import kr.co.neighbor21.neighborApi.config.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,10 +18,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * 인증처리와 401,403 에러 처리, 암호화 Security Filter
  *
  * @author GEONLEE
  * @since 2023-01-11
@@ -39,12 +39,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    @Autowired
+    private AuthFilter authFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -54,19 +55,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // 启用 cors 跨域
+//                .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable).disable())
-                .authorizeHttpRequests(auth -> {
-                    auth
-                            .requestMatchers(CommonVariables.IGNORE_URIS).permitAll()
-                            .requestMatchers(CommonVariables.SWAGGER_URIS).permitAll()
-                            .anyRequest().authenticated();
-                }).exceptionHandling(c ->
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(CommonVariables.IGNORE_URIS).permitAll()
+                        .requestMatchers(CommonVariables.SWAGGER_URIS).permitAll()
+                        .anyRequest().authenticated()).exceptionHandling(c ->
                         c.authenticationEntryPoint(jwtAuthenticationEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler)
-//              Spring Security does not adopt session mechanism
+                // Spring Security does not adopt session mechanism
                 ).sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+                // Replace the default authentication filter with the custom authentication filter
+                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authFilter, FilterSecurityInterceptor.class);
 //                .apply(new JwtSecurityConfig(tokenProvider, messageConfig)); /*spring 6.2 deprecated*/
         return http.build();
     }

@@ -55,7 +55,7 @@ public class JwtFilter extends GenericFilterBean {
         String requestURI = httpServletRequest.getRequestURI().replace(CommonVariables.CONTEXT_PATH, "");
         if (!ignoreUris.contains(requestURI) && !requestURI.startsWith("/swagger-") && !requestURI.startsWith("/api-docs")) {
             LOGGER.info("Request URI : '{}', Start to check access token. ▼", requestURI);
-            String accessToken = null;
+            String accessToken;
             /*1. Cookie Extract the access token from (NS_AUT) */
             accessToken = tokenProvider.getTokenFromCookie(httpServletRequest);
             JwtValidDto valid = new JwtValidDto(false, null, accessToken);
@@ -78,7 +78,6 @@ public class JwtFilter extends GenericFilterBean {
 
     /**
      * check Token Validity
-     * AccessToken 유효성 체크
      *
      * @author GEONLEE
      * @since 2024-03-28
@@ -87,19 +86,19 @@ public class JwtFilter extends GenericFilterBean {
                                     HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         if (!StringUtils.hasText(valid.getAccessToken()) || !tokenProvider.validateToken(valid.getAccessToken())) {
             valid.setValid(false);
-            String refreshToken = null;
-            /*Access Token 이 만료 되었을 경우 RefreshToken 을 확인*/
+            String refreshToken;
+            /*Access Token If it expires, please check the RefreshToken*/
             try {
                 refreshToken = tokenProvider.getTokenFromRequest(httpServletRequest);
                 if (StringUtils.hasText(refreshToken) && tokenProvider.validateToken(refreshToken)) {
-                    /*refreshToken 에서 권힌 정보를 추출해 새로운 Access Token 생성*/
+                    /*refreshToken Extract information to create a new Access Token*/
                     Authentication authentication = tokenProvider.getAuthentication(refreshToken);
                     String userId = tokenProvider.getUid(refreshToken);
                     valid.setUserId(userId);
                     String newAccessToken = tokenProvider.createAccessToken(authentication);
-                    /*쿠키 Access Token 정보 갱신*/
+                    /*쿠키 Access Token Update information*/
                     tokenProvider.renewalAccessTokenInCookie(httpServletResponse, newAccessToken);
-                    /*Refresh Token 으로 User 를 조회 해  Access Token 갱신*/
+                    /*Refresh Token Update Access Token by viewing users*/
                     OperatorRepository userRepository = ApplicationContextHolder.getContext().getBean(OperatorRepository.class);
                     Optional<M_OP_OPERATOR> optionalEntity = userRepository.findOneByKeyUserIdAndRefreshToken(valid.getUserId(), refreshToken);
                     if (optionalEntity.isPresent()) {

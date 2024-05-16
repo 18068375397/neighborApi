@@ -14,8 +14,6 @@ public record OperatorModifyResponse(
         String userId,
         @Schema(description = "userName / VARCHAR2(256)", example = "geonlee")
         String userName,
-        @Schema(description = "Name of responsibility / VARCHAR2(50)", example = "User permissions")
-        String authorityName,
         @Schema(description = "telephone / VARCHAR2(256)", example = "02-1234-5678")
         String telephone,
         @Schema(description = "cellphone / VARCHAR2(256)", example = "010-1234-5678")

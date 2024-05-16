@@ -19,8 +19,6 @@ public record OperatorModifyRequest(
         @Schema(description = "userName / VARCHAR2(256)", example = "geonlee")
         @ByteSize(max = 256)
         String userName,
-        @Schema(description = "authorityId / VARCHAR2(50)", example = "AUTH00001")
-        String authorityId,
         @Schema(description = "telephone / VARCHAR2(256)", example = "02-1234-5678")
         @ByteSize(max = 256)
         String telephone,

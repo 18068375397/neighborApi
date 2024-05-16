@@ -22,8 +22,6 @@ public record OperatorCreateRequest(
         @Schema(description = "userName / VARCHAR2(256)", example = "geonlee")
         @ByteSize(max = 256)
         String userName,
-        @Schema(description = "authority ID / NUMBER(6)", example = "AUTH000001")
-        String authorityId,
         @Schema(description = "telephone / VARCHAR2(256)", example = "02-1234-5678")
         @ByteSize(max = 256)
         String telephone,

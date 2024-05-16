@@ -4,7 +4,9 @@ import jakarta.transaction.Transactional;
 import kr.co.neighbor21.neighborApi.common.exception.code.CommonErrorCode;
 import kr.co.neighbor21.neighborApi.common.exception.custom.UnauthorizedException;
 import kr.co.neighbor21.neighborApi.domain.operator.OperatorRepository;
+import kr.co.neighbor21.neighborApi.entity.M_OP_AUTHORITY;
 import kr.co.neighbor21.neighborApi.entity.M_OP_OPERATOR;
+import kr.co.neighbor21.neighborApi.entity.ROLE;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,11 +54,15 @@ public class CustomUserDetailsService implements UserDetailsService {
      * BadCredentialsException 은 JwtAuthenticationEntryPoint 로 전달되기 때문에 불필요 로직을 타게 됨.<br />
      **/
     private User createUser(String userId, M_OP_OPERATOR oprEntity) {
-        if (oprEntity.getAuthority() == null) {
+        if (oprEntity.getRoles() == null) {
             throw new UnauthorizedException(CommonErrorCode.FORBIDDEN, null);
         }
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(oprEntity.getAuthority().getKey().getAuthorityId()));
+        for (ROLE role : oprEntity.getRoles()){
+            for (M_OP_AUTHORITY authority : role.getAuthorities()) {
+                grantedAuthorities.add(new SimpleGrantedAuthority(authority.getKey().getAuthorityId()));
+            }
+        }
         LOGGER.info(userId + " / Authority : {}", grantedAuthorities);
         return new User(
                 oprEntity.getKey().getUserId(),

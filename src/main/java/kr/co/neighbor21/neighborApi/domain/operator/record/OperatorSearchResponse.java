@@ -1,6 +1,9 @@
 package kr.co.neighbor21.neighborApi.domain.operator.record;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import kr.co.neighbor21.neighborApi.entity.ROLE;
+
+import java.util.List;
 
 /**
  * 운영자 조회 응답
@@ -14,10 +17,6 @@ public record OperatorSearchResponse(
         String userId,
         @Schema(description = "userName / VARCHAR2(256)", example = "geonlee")
         String userName,
-        @Schema(description = "authorityId / VARCHAR2(50)", example = "AUTH00001")
-        String authorityId,
-        @Schema(description = "Name of responsibility / VARCHAR2(50)", example = "User permissions")
-        String authorityName,
         @Schema(description = "telephone / VARCHAR2(256)", example = "02-1234-5678")
         String telephone,
         @Schema(description = "cellphone / VARCHAR2(256)", example = "010-1234-5678")
@@ -29,5 +28,7 @@ public record OperatorSearchResponse(
         @Schema(description = "modifyDate / DATE", example = "2024-01-01 00:00:00")
         String modifyDate,
         @Schema(description = "isUse / VARCHAR2(1)", example = "true")
-        Boolean isUse) {
+        Boolean isUse,
+        @Schema(description = "roles / List", example = "List")
+        List<ROLE> roles) {
 }

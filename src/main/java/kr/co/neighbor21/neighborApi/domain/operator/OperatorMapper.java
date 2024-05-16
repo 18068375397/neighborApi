@@ -27,8 +27,6 @@ public interface OperatorMapper /*extends GenericMapper<OperatorSearchResponseDT
      */
     @Mappings({
             @Mapping(target = "userId", source = "key.userId"),
-            @Mapping(target = "authorityId", source = "authority.key.authorityId"),
-            @Mapping(target = "authorityName", source = "authority.authorityName"),
             @Mapping(target = "isUse", expression = "java(MapstructConverter.stringToBoolean(entity.getIsUse()))"),
             @Mapping(target = "modifyDate", expression = "java(MapstructConverter.localDateTimeToString(entity.getModifyDate()))"),
     })
@@ -51,7 +49,6 @@ public interface OperatorMapper /*extends GenericMapper<OperatorSearchResponseDT
      */
     @Mappings({
             @Mapping(target = "userId", source = "key.userId"),
-            @Mapping(target = "authorityName", source = "authority.authorityName"),
             @Mapping(target = "isUse", expression = "java(MapstructConverter.stringToBoolean(entity.getIsUse()))"),
             @Mapping(target = "modifyDate", expression = "java(MapstructConverter.localDateTimeToString(entity.getModifyDate()))")
     })
@@ -65,7 +62,6 @@ public interface OperatorMapper /*extends GenericMapper<OperatorSearchResponseDT
      */
     @Mappings({
             @Mapping(target = "userId", source = "key.userId"),
-            @Mapping(target = "authorityName", source = "authority.authorityName"),
             @Mapping(target = "isUse", expression = "java(MapstructConverter.stringToBoolean(entity.getIsUse()))"),
             @Mapping(target = "modifyDate", expression = "java(MapstructConverter.localDateTimeToString(entity.getModifyDate()))"),
     })
@@ -106,7 +102,6 @@ public interface OperatorMapper /*extends GenericMapper<OperatorSearchResponseDT
      */
     @Mappings({
             @Mapping(target = "key.userId", source = "userId"),
-            @Mapping(target = "authority.key.authorityId", source = "authorityId"),
             @Mapping(target = "isUse", expression = "java(MapstructConverter.booleanToString(operatorCreateRequest.isUse()))"),
             @Mapping(target = "passwordUpdateDate", dateFormat = "yyyy-MM-dd HH:mm:ss")
     })

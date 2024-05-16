@@ -13,16 +13,16 @@ import java.util.List;
  * @since 2024-03-19<br />
  */
 @Builder
-@Schema(description = "공통 복수 객체 응답 구조체")
+@Schema(description = "General response structure of multiple objects")
 public record ItemsResponse<T>(
-        @Schema(description = "상태 코드", example = "NS_OK")
+        @Schema(description = "Status code", example = "NS_OK")
         String status,
-        @Schema(description = "응답 메시지", example = "응답 메시지")
+        @Schema(description = "Response message", example = "Response message")
         String message,
-        @Schema(description = "응답 데이터 사이즈", example = "1")
+        @Schema(description = "Response data size", example = "1")
         @JsonInclude(JsonInclude.Include.NON_NULL)
         Long size,
-        @Schema(description = "복수 응답 객체 / LIST")
+        @Schema(description = "Multiple response objects / LIST")
         @JsonInclude(JsonInclude.Include.NON_NULL)
         List<T> items) {
 }

@@ -15,15 +15,15 @@ import java.util.ArrayList;
  * 2023-07-21 GEONLEE - noOffsetFilter 추가<br />
  * 2024-03-22 GEONLEE - record 로 변경<br />
  */
-@Schema(description = "동적 조회 요청")
+@Schema(description = "Dynamic query request")
 public record DynamicSearchRequest(
-        @Schema(description = "가져올 개수 / default: 10", example = "10")
+        @Schema(description = "Page size / default: 10", example = "10")
         Integer take,
-        @Schema(description = "페이지 번호 / default: 0", example = "0")
+        @Schema(description = "Page number / default: 0", example = "0")
         Integer skip,
-        @Schema(description = "조회 조건 구조체")
+        @Schema(description = "Query condition subject")
         ArrayList<DynamicFilter> filter,
-        @Schema(description = "정렬 조건 구조체")
+        @Schema(description = "sort")
         ArrayList<DynamicSorter> sort,
         ArrayList<DynamicFilter> noOffsetFilter) {
     public DynamicSearchRequest {

@@ -167,7 +167,7 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponse> handleExceptionInternal(ErrorCode errorCode, Exception e) {
-        /* KT 검증 관련 수정사항, 모든 HTTP Status 코드는 200으로 전달하고 내부 코드를 상세히 전달 */
+        /* KT Validation fix, all HTTP Status code is forwarded to 200 and internal code is passed in detail */
         LOGGER.error(errorCode.getResultMsg(), e);
         return ResponseEntity.ok()
                 .header("Content-type", String.valueOf(MediaType.APPLICATION_JSON))

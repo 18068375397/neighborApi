@@ -15,7 +15,7 @@ import kr.co.neighbor21.neighborApi.common.util.CommonUtils;
  */
 public class CommonVariables {
     /*SecurityConfig, JWTFilter 에서 사용*/
-    public static final String[] IGNORE_URIS = {"/v1/login", "/v1/logout", "/v1/public-key", "/favicon.ico", "/error"};
+    public static final String[] IGNORE_URIS = {"/v1/login", "/v1/logout", "/v1/public-key", "/favicon.ico","/v1/authority/search", "/error"};
     /*SecurityConfig 에서 사용*/
     public static final String[] SWAGGER_URIS = {"swagger-ui.html", "/swagger-ui/**", "/api-docs/**"};
     public static final String CONTEXT_PATH = CommonUtils.getPropertyValue("server.servlet.context-path");

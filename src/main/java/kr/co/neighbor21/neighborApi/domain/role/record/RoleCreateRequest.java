@@ -9,9 +9,12 @@ import java.util.List;
 
 @Schema(description = "role")
 public record RoleCreateRequest(
-        @Schema(description = "name / VARCHAR2(256)", example = "admin")
+        @Schema(description = "roleId / VARCHAR2(50)", example = "ROLE001")
         @ByteSize(max = 50)
-        String name,
+        String roleId,
+        @Schema(description = "roleName / VARCHAR2(50)", example = "admin")
+        @ByteSize(max = 50)
+        String roleName,
         @Schema(description = "authorities / List", example = "List")
         List<M_OP_AUTHORITY> authorities) {
 }

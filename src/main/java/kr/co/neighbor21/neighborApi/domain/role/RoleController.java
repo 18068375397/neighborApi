@@ -3,11 +3,9 @@ package kr.co.neighbor21.neighborApi.domain.role;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import kr.co.neighbor21.neighborApi.common.response.structure.ItemResponse;
 import kr.co.neighbor21.neighborApi.common.response.structure.ItemsResponse;
-import kr.co.neighbor21.neighborApi.domain.role.record.RoleCreateRequest;
-import kr.co.neighbor21.neighborApi.domain.role.record.RoleCreateResponse;
-import kr.co.neighbor21.neighborApi.domain.role.record.RoleSearchRequest;
-import kr.co.neighbor21.neighborApi.domain.role.record.RoleSearchResponse;
+import kr.co.neighbor21.neighborApi.domain.role.record.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +22,8 @@ public class RoleController {
     @PostMapping(value = "/v1/role/search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "View operator information ( how to use SearchRequest )", description = """
             # Parameters
-            - name [role Name]
+            - roleId [role id]
+            - roleName [role Name]
             """,
             operationId = "API-002-01"
     )
@@ -35,13 +34,41 @@ public class RoleController {
     @PostMapping(value = "/v1/role/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "create role with authority", description = """
             # Parameters
-            - name [role Name]
+            - roleId [role id]
+            - roleName [role Name]
             - List [M_OP_AUTHORITY]
             """,
             operationId = "API-002-02"
     )
-    public ResponseEntity<ItemsResponse<RoleCreateResponse>> create(@RequestBody @Valid RoleCreateRequest parameter) {
+    public ResponseEntity<ItemResponse<RoleCreateResponse>> create(@RequestBody @Valid RoleCreateRequest parameter) {
         return roleService.createRole(parameter);
     }
+
+    @PostMapping(value = "/v1/role/modify", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "modify role with authority", description = """
+            # Parameters
+            - id [id]
+            - roleId [role id]
+            - roleName [role Name]
+            - List [M_OP_AUTHORITY]
+            """,
+            operationId = "API-002-03"
+    )
+    public ResponseEntity<ItemResponse<RoleModifyResponse>> modify(@RequestBody @Valid RoleModifyRequest parameter) {
+        return roleService.modifyRole(parameter);
+    }
+
+
+    @PostMapping(value = "/v1/role/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "delete role ", description = """
+            # Parameters
+            - id [id]
+            """,
+            operationId = "API-002-04"
+    )
+    public ResponseEntity<ItemResponse<Long>> delete(@RequestBody @Valid RoleDeleteRequest parameter) {
+        return roleService.deleteRole(parameter);
+    }
+
 
 }

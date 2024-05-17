@@ -40,8 +40,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        return operatorRepository.findOneByKeyUserId(userId).map(user -> createUser(userId, user))
-                .orElseThrow(() -> new UsernameNotFoundException(userId + " -> not found."));
+        M_OP_OPERATOR opOperator = operatorRepository.findOneByUserId(userId);
+        if (opOperator == null) {
+            throw new UsernameNotFoundException(userId + " -> not found.");
+        }
+        return createUser(userId, opOperator);
     }
 
     /**
@@ -60,12 +63,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         for (ROLE role : oprEntity.getRoles()){
             for (M_OP_AUTHORITY authority : role.getAuthorities()) {
-                grantedAuthorities.add(new SimpleGrantedAuthority(authority.getKey().getAuthorityId()));
+                grantedAuthorities.add(new SimpleGrantedAuthority(authority.getAuthorityId()));
             }
         }
         LOGGER.info(userId + " / Authority : {}", grantedAuthorities);
         return new User(
-                oprEntity.getKey().getUserId(),
+                oprEntity.getUserId(),
                 oprEntity.getPassword(),
                 grantedAuthorities
         );

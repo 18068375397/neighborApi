@@ -5,11 +5,10 @@ import kr.co.neighbor21.neighborApi.common.validation.annotation.ByteSize;
 
 
 @Schema(description = "role")
-public record RoleSearchRequest(
+public record RoleDeleteRequest(
+        @Schema(description = "id / int(50)", example = "1")
+        String id,
         @Schema(description = "roleId / VARCHAR2(50)", example = "ROLE001")
         @ByteSize(max = 50)
-        String roleId,
-        @Schema(description = "roleName / VARCHAR2(50)", example = "admin")
-        @ByteSize(max = 50)
-        String roleName) {
+        String roleId) {
 }

@@ -100,10 +100,10 @@ public class JwtFilter extends GenericFilterBean {
                     tokenProvider.renewalAccessTokenInCookie(httpServletResponse, newAccessToken);
                     /*Refresh Token Update Access Token by viewing users*/
                     OperatorRepository userRepository = ApplicationContextHolder.getContext().getBean(OperatorRepository.class);
-                    Optional<M_OP_OPERATOR> optionalEntity = userRepository.findOneByKeyUserIdAndRefreshToken(valid.getUserId(), refreshToken);
-                    if (optionalEntity.isPresent()) {
-                        optionalEntity.get().setAccessToken(newAccessToken);
-                        userRepository.save(optionalEntity.get());
+                    M_OP_OPERATOR optionalEntity = userRepository.findOneByUserIdAndRefreshToken(valid.getUserId(), refreshToken);
+                    if (optionalEntity != null) {
+                        optionalEntity.setAccessToken(newAccessToken);
+                        userRepository.save(optionalEntity);
                         valid.setAccessToken(newAccessToken);
                         valid.setValid(true);
                         LOGGER.info("Renew user's access token with refresh token: '{}'", valid.getUserId());
@@ -130,8 +130,8 @@ public class JwtFilter extends GenericFilterBean {
      */
     private void checkDuplicationLogin(JwtValidDto valid, HttpServletRequest httpServletRequest) {
         OperatorRepository userRepository = ApplicationContextHolder.getContext().getBean(OperatorRepository.class);
-        Optional<M_OP_OPERATOR> optionalEntity = userRepository.findOneByKeyUserIdAndAccessToken(valid.getUserId(), valid.getAccessToken());
-        if (optionalEntity.isEmpty()) {
+        M_OP_OPERATOR optionalEntity = userRepository.findOneByUserIdAndAccessToken(valid.getUserId(), valid.getAccessToken());
+        if (optionalEntity == null) {
             LOGGER.error("User's access token is different. (Duplicated login): '{}'", valid.getUserId());
             valid.setValid(false);
             httpServletRequest.getSession().setAttribute(AUTHORIZATION_FAIL_TYPE, CommonErrorCode.DUPLICATION_LOGIN);

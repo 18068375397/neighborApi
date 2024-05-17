@@ -70,8 +70,8 @@ spring:
     # 修改测试地址
     url: "jdbc:mariadb://106.54.220.179:3306/API_TEST_DB"
     driver-class-name: "org.mariadb.jdbc.Driver"
-    username: root
-    password: root
+    username: test
+    password: test315JARWE;
 #    url: "jdbc:mariadb://211.41.186.111:3306/API_TEST_DB"
 #    driver-class-name: "org.mariadb.jdbc.Driver"
 #    username: api_test

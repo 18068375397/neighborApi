@@ -58,8 +58,10 @@ public class LoginService {
         String resultCode = messageConfig.getCode("SUCCESS.CODE");
         String resultMsg = messageConfig.getMsg("LOGIN.SUCCESS.MSG");
         /*1. ID가 Check to see if it exists*/
-        M_OP_OPERATOR entity = operatorRepository.findOneByKeyUserId(parameter.id())
-                .orElseThrow(() -> new UnauthorizedException(CommonErrorCode.NO_MATCHING_USER, null));
+        M_OP_OPERATOR entity = operatorRepository.findOneByUserId(parameter.id());
+        if (entity == null) {
+            throw new UnauthorizedException(CommonErrorCode.NO_MATCHING_USER, null);
+        }
         /*2. Password Check if there is a match*/
         String decryptedPassword;
         decryptedPassword = keyGen.decryptRSA(parameter.password());
@@ -125,10 +127,10 @@ public class LoginService {
             try {
                 String userId = tokenProvider.getUid(accessToken);
                 tokenProvider.expirationToken(response);
-                Optional<M_OP_OPERATOR> optionalEntity = operatorRepository.findOneByKeyUserId(userId);
-                if (optionalEntity.isPresent()) {
-                    optionalEntity.get().setAccessToken(null);
-                    optionalEntity.get().setRefreshToken(null);
+                M_OP_OPERATOR optionalEntity = operatorRepository.findOneByUserId(userId);
+                if (optionalEntity != null) {
+                    optionalEntity.setAccessToken(null);
+                    optionalEntity.setRefreshToken(null);
                 }
             } catch (JwtException e) {
                 throw new UnauthorizedException(CommonErrorCode.EXPIRED_TOKEN, e);

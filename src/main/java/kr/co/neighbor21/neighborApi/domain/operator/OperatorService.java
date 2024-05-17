@@ -9,7 +9,6 @@ import kr.co.neighbor21.neighborApi.common.response.structure.ItemResponse;
 import kr.co.neighbor21.neighborApi.common.response.structure.ItemsResponse;
 import kr.co.neighbor21.neighborApi.domain.operator.record.*;
 import kr.co.neighbor21.neighborApi.entity.M_OP_OPERATOR;
-import kr.co.neighbor21.neighborApi.entity.key.M_OP_OPERATOR_KEY;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 운영자 Service
@@ -76,26 +76,20 @@ public class OperatorService {
 //            return operatorMapper.toSearchResponseList(list);
 
             /*queryMethod 방식*/
-            List<M_OP_OPERATOR> list = operatorRepository.findByKeyUserIdLikeOrUserNameLike(
+            List<M_OP_OPERATOR> list = operatorRepository.findByUserIdLikeOrUserNameLike(
                     "%" + parameter.userId() + "%", "%" + parameter.userName() + "%");
             return operatorMapper.toSearchResponseList(list);
         });
     }
 
     /**
-     * 운영자 정보 추가
-     *
-     * @param parameter 운영자 추가 요청 정보
-     * @return OperatorCreateResponse 생성 된 운영자 정보 응답
-     * @author GEONLEE
-     * @since 2024-03-21<br />
+     * createOperator
      */
     @Transactional
     public ResponseEntity<ItemResponse<OperatorCreateResponse>> createOperator(OperatorCreateRequest parameter) throws ServiceException {
         GenerateResponse<OperatorCreateResponse> generateResponse = new GenerateResponse<>();
         return generateResponse.generateCreateResponse(() -> {
-            M_OP_OPERATOR_KEY id = operatorMapper.toEntityKey(parameter);
-            if (operatorRepository.existsById(id)) {
+            if (operatorRepository.existsByUserId(parameter.userId())) {
                 throw new ServiceException(CommonErrorCode.ENTITY_DUPLICATED, null);
             }
             M_OP_OPERATOR createRequestEntity = operatorMapper.toEntity(parameter);
@@ -105,42 +99,34 @@ public class OperatorService {
     }
 
     /**
-     * 운영자 정보 수정
-     *
-     * @param parameter 운영자 수정 요청 정보
-     * @return OperatorModifyResponse 수정된 운영자 정보 응답
-     * @author GEONLEE
-     * @since 2024-03-21<br />
+     * modifyOperator
      */
     @Transactional
     public ResponseEntity<ItemResponse<OperatorModifyResponse>> modifyOperator(OperatorModifyRequest parameter) throws ServiceException {
         GenerateResponse<OperatorModifyResponse> generateResponse = new GenerateResponse<>();
         return generateResponse.generateModifyResponse(() -> {
-            M_OP_OPERATOR_KEY entityKey = operatorMapper.toEntityKey(parameter);
-            M_OP_OPERATOR entity = operatorRepository.findById(entityKey)
-                    .orElseThrow(() -> new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null));
-            M_OP_OPERATOR modifiedEntity = operatorMapper.updateFromRequest(parameter, entity);
+            M_OP_OPERATOR opOperator = operatorRepository.findOneByUserId(parameter.userId());
+            if (opOperator != null) {
+                throw new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null);
+            }
+            M_OP_OPERATOR modifiedEntity = operatorMapper.updateFromRequest(parameter, opOperator);
             operatorRepository.saveAndFlush(modifiedEntity);
             return operatorMapper.toModifyResponse(modifiedEntity);
         });
     }
 
     /**
-     * 운영자 정보 삭제
-     *
-     * @param parameter 운영자 삭제 요청 정보
-     * @return Long 삭제된 데이터 개수
-     * @author GEONLEE
-     * @since 2024-03-21<br />
+     * deleteOperator
      */
     @Transactional
     public ResponseEntity<ItemResponse<Long>> deleteOperator(OperatorDeleteRequest parameter) throws ServiceException {
         GenerateResponse<Long> generateResponse = new GenerateResponse<>();
         return generateResponse.generateDeleteResponse(() -> {
-            M_OP_OPERATOR_KEY entityKey = operatorMapper.toEntityKey(parameter);
-            M_OP_OPERATOR entity = operatorRepository.findById(entityKey)
-                    .orElseThrow(() -> new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null));
-            operatorRepository.delete(entity);
+            M_OP_OPERATOR opOperator = operatorRepository.findOneByUserId(parameter.userId());
+            if (opOperator != null) {
+                throw new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null);
+            }
+            operatorRepository.delete(opOperator);
             return 1L;
         });
     }

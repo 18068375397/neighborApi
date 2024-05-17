@@ -1,11 +1,11 @@
 package kr.co.neighbor21.neighborApi.domain.role;
 
+import kr.co.neighbor21.neighborApi.common.exception.code.CommonErrorCode;
+import kr.co.neighbor21.neighborApi.common.exception.custom.ServiceException;
 import kr.co.neighbor21.neighborApi.common.response.GenerateResponse;
+import kr.co.neighbor21.neighborApi.common.response.structure.ItemResponse;
 import kr.co.neighbor21.neighborApi.common.response.structure.ItemsResponse;
-import kr.co.neighbor21.neighborApi.domain.role.record.RoleCreateRequest;
-import kr.co.neighbor21.neighborApi.domain.role.record.RoleCreateResponse;
-import kr.co.neighbor21.neighborApi.domain.role.record.RoleSearchRequest;
-import kr.co.neighbor21.neighborApi.domain.role.record.RoleSearchResponse;
+import kr.co.neighbor21.neighborApi.domain.role.record.*;
 import kr.co.neighbor21.neighborApi.entity.ROLE;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +23,45 @@ public class RoleService {
         GenerateResponse<RoleSearchResponse> generateResponse = new GenerateResponse<>();
         return generateResponse.generateItemsResponse(() -> {
 
-            List<ROLE> roleList = roleRepository.findAllByRoleNameLike("%" + parameter.name() + "%");
+            List<ROLE> roleList = roleRepository.findAllByRoleNameLike("%" + parameter.roleName() + "%");
             return roleMapper.toSearchResponseList(roleList);
         });
 
     }
 
-    public ResponseEntity<ItemsResponse<RoleCreateResponse>> createRole(RoleCreateRequest parameter) {
-        return null;
+    public ResponseEntity<ItemResponse<RoleCreateResponse>> createRole(RoleCreateRequest parameter) {
+        GenerateResponse<RoleCreateResponse> generateResponse = new GenerateResponse<>();
+        return generateResponse.generateCreateResponse(() -> {
+
+            if (roleRepository.findByRoleId(parameter.roleId()) != null) {
+                throw new ServiceException(CommonErrorCode.ENTITY_DUPLICATED, null);
+            }
+            ROLE createRequestEntity = roleMapper.toEntity(parameter);
+
+            ROLE createdEntity = roleRepository.save(createRequestEntity);
+            return roleMapper.toCreateResponse(createdEntity);
+        });
+    }
+
+    public ResponseEntity<ItemResponse<RoleModifyResponse>> modifyRole(RoleModifyRequest parameter) {
+        GenerateResponse<RoleModifyResponse> generateResponse = new GenerateResponse<>();
+        return generateResponse.generateModifyResponse(() -> {
+            ROLE entity = roleRepository.findById(Integer.valueOf(parameter.id()))
+                    .orElseThrow(() -> new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null));
+
+            ROLE modifiedEntity = roleMapper.updateFromRequest(parameter);
+            roleRepository.saveAndFlush(modifiedEntity);
+            return roleMapper.toModifyResponse(modifiedEntity);
+        });
+    }
+
+    public ResponseEntity<ItemResponse<Long>> deleteRole(RoleDeleteRequest parameter) {
+        GenerateResponse<Long> generateResponse = new GenerateResponse<>();
+        return generateResponse.generateDeleteResponse(() -> {
+            ROLE entity = roleRepository.findById(Integer.valueOf(parameter.id()))
+                    .orElseThrow(() -> new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null));
+            roleRepository.delete(entity);
+            return 1L;
+        });
     }
 }

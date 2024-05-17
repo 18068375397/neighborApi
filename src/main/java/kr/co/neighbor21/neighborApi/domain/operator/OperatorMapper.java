@@ -3,7 +3,6 @@ package kr.co.neighbor21.neighborApi.domain.operator;
 import kr.co.neighbor21.neighborApi.common.jpa.mapStruct.MapstructConverter;
 import kr.co.neighbor21.neighborApi.domain.operator.record.*;
 import kr.co.neighbor21.neighborApi.entity.M_OP_OPERATOR;
-import kr.co.neighbor21.neighborApi.entity.key.M_OP_OPERATOR_KEY;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -26,7 +25,7 @@ public interface OperatorMapper /*extends GenericMapper<OperatorSearchResponseDT
      * @since 2024-03-21생성<br />
      */
     @Mappings({
-            @Mapping(target = "userId", source = "key.userId"),
+            @Mapping(target = "userId", source = "userId"),
             @Mapping(target = "isUse", expression = "java(MapstructConverter.stringToBoolean(entity.getIsUse()))"),
             @Mapping(target = "modifyDate", expression = "java(MapstructConverter.localDateTimeToString(entity.getModifyDate()))"),
     })
@@ -48,7 +47,7 @@ public interface OperatorMapper /*extends GenericMapper<OperatorSearchResponseDT
      * @since 2024-03-21<br />
      */
     @Mappings({
-            @Mapping(target = "userId", source = "key.userId"),
+            @Mapping(target = "userId", source = "userId"),
             @Mapping(target = "isUse", expression = "java(MapstructConverter.stringToBoolean(entity.getIsUse()))"),
             @Mapping(target = "modifyDate", expression = "java(MapstructConverter.localDateTimeToString(entity.getModifyDate()))")
     })
@@ -61,35 +60,11 @@ public interface OperatorMapper /*extends GenericMapper<OperatorSearchResponseDT
      * @since 2024-03-21<br />
      */
     @Mappings({
-            @Mapping(target = "userId", source = "key.userId"),
+            @Mapping(target = "userId", source = "userId"),
             @Mapping(target = "isUse", expression = "java(MapstructConverter.stringToBoolean(entity.getIsUse()))"),
             @Mapping(target = "modifyDate", expression = "java(MapstructConverter.localDateTimeToString(entity.getModifyDate()))"),
     })
     OperatorModifyResponse toModifyResponse(M_OP_OPERATOR entity);
-
-    /**
-     * 추가 시 키 추출용 메서드
-     *
-     * @author GEONLEE
-     * @since 2024-04-01<br />
-     */
-    M_OP_OPERATOR_KEY toEntityKey(OperatorCreateRequest operatorModifyRequest);
-
-    /**
-     * 삭제 시 키 추출용 메서드
-     *
-     * @author GEONLEE
-     * @since 2024-04-01<br />
-     */
-    M_OP_OPERATOR_KEY toEntityKey(OperatorDeleteRequest operatorDeleteRequest);
-
-    /**
-     * 수정 시 키 추출용 메서드
-     *
-     * @author GEONLEE
-     * @since 2024-04-01<br />
-     */
-    M_OP_OPERATOR_KEY toEntityKey(OperatorModifyRequest operatorModifyRequest);
 
 
     /**
@@ -101,7 +76,7 @@ public interface OperatorMapper /*extends GenericMapper<OperatorSearchResponseDT
      * @since 2024-03-21<br />
      */
     @Mappings({
-            @Mapping(target = "key.userId", source = "userId"),
+            @Mapping(target = "userId", source = "userId"),
             @Mapping(target = "isUse", expression = "java(MapstructConverter.booleanToString(operatorCreateRequest.isUse()))"),
             @Mapping(target = "passwordUpdateDate", dateFormat = "yyyy-MM-dd HH:mm:ss")
     })
@@ -116,7 +91,7 @@ public interface OperatorMapper /*extends GenericMapper<OperatorSearchResponseDT
      */
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     @Mappings({
-            @Mapping(target = "key.userId", source = "userId"),
+            @Mapping(target = "userId", source = "userId"),
             @Mapping(target = "isUse", expression = "java(MapstructConverter.booleanToString(operatorModifyRequest.isUse()))"),
     })
     M_OP_OPERATOR updateFromRequest(OperatorModifyRequest operatorModifyRequest, @MappingTarget M_OP_OPERATOR entity);

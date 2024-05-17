@@ -6,21 +6,13 @@ import kr.co.neighbor21.neighborApi.common.jpa.baseEntity.BaseEntity;
 import kr.co.neighbor21.neighborApi.common.jpa.querydsl.annotation.DefaultSort;
 import kr.co.neighbor21.neighborApi.common.jpa.querydsl.annotation.SearchField;
 import kr.co.neighbor21.neighborApi.common.jpa.querydsl.enumeration.SortOrder;
-import kr.co.neighbor21.neighborApi.entity.key.M_OP_OPERATOR_KEY;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * [마스터 운영 운영자] Entity<br />
- *
- * @author GEONLEE
- * @since 2024-03-21<br />
- */
 
 @Getter
 @Setter
@@ -28,14 +20,16 @@ import java.util.List;
 @Table(name = "m_op_operator")
 @DefaultSort(columnName = "key.userId", dir = SortOrder.DESC)
 public class M_OP_OPERATOR extends BaseEntity {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SearchField(columnName = "id")
+    private BigInteger id;
 
     /* 키 */
-    @EmbeddedId
-    @SearchField(columnName = {"key.userId"})
-    private M_OP_OPERATOR_KEY key;
-    /* 운영자 비밀번호 */
-    @Column(name = "password")
-    private String password;
+    @Column(name = "user_id")
+    @SearchField(columnName = "userId")
+    private String userId;
     /* 운영자 명 */
     @Column(name = "user_name")
     @SearchField(columnName = "userName")
@@ -63,6 +57,9 @@ public class M_OP_OPERATOR extends BaseEntity {
     /* 어세스토큰*/
     @Column(name = "access_token")
     private String accessToken;
+    /* 운영자 비밀번호 */
+    @Column(name = "password")
+    private String password;
     /* 리프레쉬토큰*/
     @Column(name = "refresh_token")
     private String refreshToken;
@@ -81,5 +78,5 @@ public class M_OP_OPERATOR extends BaseEntity {
             //inverseJoinColumns ,对方对象在中间表中的外键
             inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "role_id")}
     )
-    List<ROLE> roles = new ArrayList<>();
+    private List<ROLE> roles;
 }

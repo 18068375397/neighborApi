@@ -46,11 +46,11 @@ public class RoleService {
     public ResponseEntity<ItemResponse<RoleModifyResponse>> modifyRole(RoleModifyRequest parameter) {
         GenerateResponse<RoleModifyResponse> generateResponse = new GenerateResponse<>();
         return generateResponse.generateModifyResponse(() -> {
-            ROLE entity = roleRepository.findById(Integer.valueOf(parameter.id()))
+            roleRepository.findById(Integer.valueOf(parameter.id()))
                     .orElseThrow(() -> new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null));
 
             ROLE modifiedEntity = roleMapper.updateFromRequest(parameter);
-            roleRepository.saveAndFlush(modifiedEntity);
+            roleRepository.save(modifiedEntity);
             return roleMapper.toModifyResponse(modifiedEntity);
         });
     }

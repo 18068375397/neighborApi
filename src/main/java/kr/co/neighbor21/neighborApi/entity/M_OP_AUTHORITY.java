@@ -1,5 +1,6 @@
 package kr.co.neighbor21.neighborApi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import kr.co.neighbor21.neighborApi.common.jpa.baseEntity.BaseEntity;
 import kr.co.neighbor21.neighborApi.common.jpa.querydsl.annotation.DefaultSort;
@@ -9,6 +10,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigInteger;
+import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -26,7 +29,6 @@ import java.math.BigInteger;
 public class M_OP_AUTHORITY extends BaseEntity {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SearchField(columnName = "id")
     private BigInteger id;
 
@@ -47,7 +49,19 @@ public class M_OP_AUTHORITY extends BaseEntity {
     @SearchField(columnName = "description")
     private String description;
 
-//    @JsonIgnoreProperties(value = {"authorities"})
-//    @ManyToMany(targetEntity = ROLE.class)
-//    private List<ROLE> roles;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "authorities")
+    private List<ROLE> roles;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        M_OP_AUTHORITY entity = (M_OP_AUTHORITY) o;
+        return Objects.equals(id, entity.id);
+    }
 }

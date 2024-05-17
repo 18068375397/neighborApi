@@ -12,6 +12,7 @@ import lombok.Setter;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 
 @Getter
@@ -22,7 +23,6 @@ import java.util.List;
 public class M_OP_OPERATOR extends BaseEntity {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SearchField(columnName = "id")
     private BigInteger id;
 
@@ -73,10 +73,20 @@ public class M_OP_OPERATOR extends BaseEntity {
     @JsonIgnoreProperties(value = {"mOpOperators"})
     @ManyToMany(targetEntity = ROLE.class, fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ROLE",
-            //joinColumns,当前对象在中间表中的外键
             joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "user_id")},
-            //inverseJoinColumns ,对方对象在中间表中的外键
             inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "role_id")}
     )
     private List<ROLE> roles;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        M_OP_OPERATOR entity = (M_OP_OPERATOR) o;
+        return Objects.equals(id, entity.id);
+    }
 }

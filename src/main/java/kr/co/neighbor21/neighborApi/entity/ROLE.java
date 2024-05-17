@@ -1,5 +1,6 @@
 package kr.co.neighbor21.neighborApi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import kr.co.neighbor21.neighborApi.common.jpa.baseEntity.BaseEntity;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Getter
@@ -21,7 +23,6 @@ public class ROLE extends BaseEntity {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SearchField(columnName = "id")
     private int id;
 
@@ -33,18 +34,27 @@ public class ROLE extends BaseEntity {
     @SearchField(columnName = "roleName")
     private String roleName;
 
-//    @JsonIgnoreProperties(value = {"roles"})
-//    @ManyToMany(targetEntity = M_OP_OPERATOR.class)
-//    private List<M_OP_OPERATOR> mOpOperators;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "roles")
+    private List<M_OP_OPERATOR> mOpOperators;
 
     @JsonIgnoreProperties(value = {"roles"})
-    @ManyToMany(targetEntity = M_OP_AUTHORITY.class, fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ROLE_AUTHORITY",
-            //joinColumns,当前对象在中间表中的外键
             joinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "role_id")},
-            //inverseJoinColumns ,对方对象在中间表中的外键
             inverseJoinColumns = {@JoinColumn(name = "authority_id",referencedColumnName = "authority_id")}
     )
     private List<M_OP_AUTHORITY> authorities;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ROLE entity = (ROLE) o;
+        return Objects.equals(id, entity.id);
+    }
 }

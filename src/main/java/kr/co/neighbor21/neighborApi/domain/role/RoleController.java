@@ -34,7 +34,7 @@ public class RoleController {
     @PostMapping(value = "/v1/role/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "create role with authority", description = """
             # Parameters
-            - roleId [role id]
+            - roleId [role id] <font color='red'>*</font>
             - roleName [role Name]
             - List [M_OP_AUTHORITY]
             """,
@@ -47,7 +47,7 @@ public class RoleController {
     @PostMapping(value = "/v1/role/modify", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "modify role with authority", description = """
             # Parameters
-            - id [id]
+            - id [id] <font color='red'>*</font>
             - roleId [role id]
             - roleName [role Name]
             - List [M_OP_AUTHORITY]
@@ -62,7 +62,7 @@ public class RoleController {
     @PostMapping(value = "/v1/role/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "delete role ", description = """
             # Parameters
-            - id [id]
+            - id [id] <font color='red'>*</font>
             """,
             operationId = "API-002-04"
     )

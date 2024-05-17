@@ -3,6 +3,10 @@ package kr.co.neighbor21.neighborApi.domain.operator.record;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import kr.co.neighbor21.neighborApi.common.validation.annotation.ByteSize;
+import kr.co.neighbor21.neighborApi.entity.ROLE;
+
+import java.math.BigInteger;
+import java.util.List;
 
 /**
  * 운영자 수정 요청
@@ -12,8 +16,10 @@ import kr.co.neighbor21.neighborApi.common.validation.annotation.ByteSize;
  */
 @Schema(description = "운영자 수정 요청")
 public record OperatorModifyRequest(
-        @Schema(description = "userId / VARCHAR2(50)", example = "test")
+        @Schema(description = "id / int(50)", example = "1")
         @NotNull
+        BigInteger id,
+        @Schema(description = "userId / VARCHAR2(50)", example = "test")
         @ByteSize(max = 50)
         String userId,
         @Schema(description = "userName / VARCHAR2(256)", example = "geonlee")
@@ -32,6 +38,8 @@ public record OperatorModifyRequest(
         @ByteSize(max = 256)
         String department,
         @Schema(description = "isUse / BOOLEAN", example = "false")
-        Boolean isUse) {
+        Boolean isUse,
+        @Schema(description = "roles / List", example = "List")
+        List<ROLE> roles) {
 
 }

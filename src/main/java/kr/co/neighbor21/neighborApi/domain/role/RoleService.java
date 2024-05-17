@@ -1,5 +1,6 @@
 package kr.co.neighbor21.neighborApi.domain.role;
 
+import jakarta.transaction.Transactional;
 import kr.co.neighbor21.neighborApi.common.exception.code.CommonErrorCode;
 import kr.co.neighbor21.neighborApi.common.exception.custom.ServiceException;
 import kr.co.neighbor21.neighborApi.common.response.GenerateResponse;
@@ -19,6 +20,7 @@ public class RoleService {
     private final RoleRepository roleRepository;
     private final RoleMapper roleMapper = RoleMapper.INSTANCE;
 
+    @Transactional
     public ResponseEntity<ItemsResponse<RoleSearchResponse>> getRoleList(RoleSearchRequest parameter) {
         GenerateResponse<RoleSearchResponse> generateResponse = new GenerateResponse<>();
         return generateResponse.generateItemsResponse(() -> {
@@ -29,6 +31,7 @@ public class RoleService {
 
     }
 
+    @Transactional
     public ResponseEntity<ItemResponse<RoleCreateResponse>> createRole(RoleCreateRequest parameter) {
         GenerateResponse<RoleCreateResponse> generateResponse = new GenerateResponse<>();
         return generateResponse.generateCreateResponse(() -> {
@@ -43,22 +46,27 @@ public class RoleService {
         });
     }
 
+    @Transactional
     public ResponseEntity<ItemResponse<RoleModifyResponse>> modifyRole(RoleModifyRequest parameter) {
         GenerateResponse<RoleModifyResponse> generateResponse = new GenerateResponse<>();
         return generateResponse.generateModifyResponse(() -> {
-            roleRepository.findById(Integer.valueOf(parameter.id()))
+            ROLE oldEntity = roleRepository.findById(parameter.id())
                     .orElseThrow(() -> new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null));
 
             ROLE modifiedEntity = roleMapper.updateFromRequest(parameter);
+            if (modifiedEntity.getRoleId() == null || !modifiedEntity.getRoleId().equals(oldEntity.getRoleId())) {
+                modifiedEntity.setRoleId(oldEntity.getRoleId());
+            }
             roleRepository.save(modifiedEntity);
             return roleMapper.toModifyResponse(modifiedEntity);
         });
     }
 
+    @Transactional
     public ResponseEntity<ItemResponse<Long>> deleteRole(RoleDeleteRequest parameter) {
         GenerateResponse<Long> generateResponse = new GenerateResponse<>();
         return generateResponse.generateDeleteResponse(() -> {
-            ROLE entity = roleRepository.findById(Integer.valueOf(parameter.id()))
+            ROLE entity = roleRepository.findById(parameter.id())
                     .orElseThrow(() -> new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null));
             roleRepository.delete(entity);
             return 1L;

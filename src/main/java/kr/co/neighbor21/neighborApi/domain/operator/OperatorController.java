@@ -68,7 +68,7 @@ public class OperatorController {
     @PostMapping(value = "/v1/operator/search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "View operator information ( how to use SearchRequest )", description = """
             # Parameters
-            - userId [operator ID]<font color='red'>*</font>
+            - userId [operator ID]
             - userName [operator Name]
             """,
             operationId = "API-001-01-2"
@@ -78,19 +78,42 @@ public class OperatorController {
     }
 
     @PostMapping(value = "/v1/operator/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "운영자 정보 추가", operationId = "API-001-02")
+    @Operation(summary = "운영자 정보 추가", description = """
+            # Parameters
+            - userId [userId]
+            - userName [userName]
+            - telephone [telephone]
+            - cellphone [cellphone]
+            - position [position]
+            - department [department]
+            """,
+            operationId = "API-001-02")
     public ResponseEntity<ItemResponse<OperatorCreateResponse>> createOperator(@RequestBody @Valid OperatorCreateRequest parameter) {
         return operatorService.createOperator(parameter);
     }
 
     @PostMapping(value = "/v1/operator/modify", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "운영자 정보 수정", operationId = "API-001-03")
+    @Operation(summary = "운영자 정보 수정", description = """
+            # Parameters
+            - id [id] <font color='red'>*</font>
+            - userId [userId] can not change
+            - userName [userName]
+            - telephone [telephone]
+            - cellphone [cellphone]
+            - position [position]
+            - department [department]
+            """,
+            operationId = "API-001-03")
     public ResponseEntity<ItemResponse<OperatorModifyResponse>> modifyOperator(@RequestBody @Valid OperatorModifyRequest parameter) {
         return operatorService.modifyOperator(parameter);
     }
 
     @PostMapping(value = "/v1/operator/delete", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "운영자 정보 삭제", operationId = "API-001-04")
+    @Operation(summary = "운영자 정보 삭제", description = """
+            # Parameters
+            - id [id] <font color='red'>*</font>
+            """,
+            operationId = "API-001-04")
     public ResponseEntity<ItemResponse<Long>> deleteOperator(@RequestBody @Valid OperatorDeleteRequest parameter) {
         return operatorService.deleteOperator(parameter);
     }

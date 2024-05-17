@@ -48,7 +48,7 @@ public class RoleController {
     @Operation(summary = "modify role with authority", description = """
             # Parameters
             - id [id] <font color='red'>*</font>
-            - roleId [role id]
+            - roleId [role id] can not change
             - roleName [role Name]
             - List [M_OP_AUTHORITY]
             """,

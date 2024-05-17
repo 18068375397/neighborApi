@@ -94,5 +94,5 @@ public interface OperatorMapper /*extends GenericMapper<OperatorSearchResponseDT
             @Mapping(target = "userId", source = "userId"),
             @Mapping(target = "isUse", expression = "java(MapstructConverter.booleanToString(operatorModifyRequest.isUse()))"),
     })
-    M_OP_OPERATOR updateFromRequest(OperatorModifyRequest operatorModifyRequest, @MappingTarget M_OP_OPERATOR entity);
+    M_OP_OPERATOR updateFromRequest(OperatorModifyRequest operatorModifyRequest);
 }

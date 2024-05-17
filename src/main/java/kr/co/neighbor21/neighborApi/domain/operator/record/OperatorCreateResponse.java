@@ -1,6 +1,9 @@
 package kr.co.neighbor21.neighborApi.domain.operator.record;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import kr.co.neighbor21.neighborApi.entity.ROLE;
+
+import java.util.List;
 
 /**
  * 운영자 추가 응답
@@ -25,5 +28,7 @@ public record OperatorCreateResponse(
         @Schema(description = "modifyDate / DATE", example = "2024-01-01 00:00:00")
         String modifyDate,
         @Schema(description = "isUse / VARCHAR2(1)", example = "true")
-        Boolean isUse) {
+        Boolean isUse,
+        @Schema(description = "roles / List", example = "List")
+        List<ROLE> roles) {
 }

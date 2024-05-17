@@ -29,6 +29,7 @@ import java.util.Objects;
 public class M_OP_AUTHORITY extends BaseEntity {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SearchField(columnName = "id")
     private BigInteger id;
 

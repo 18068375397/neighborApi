@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 운영자 Service
@@ -105,12 +104,13 @@ public class OperatorService {
     public ResponseEntity<ItemResponse<OperatorModifyResponse>> modifyOperator(OperatorModifyRequest parameter) throws ServiceException {
         GenerateResponse<OperatorModifyResponse> generateResponse = new GenerateResponse<>();
         return generateResponse.generateModifyResponse(() -> {
-            M_OP_OPERATOR opOperator = operatorRepository.findOneByUserId(parameter.userId());
-            if (opOperator != null) {
-                throw new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null);
+            M_OP_OPERATOR oldEntity = operatorRepository.findById(parameter.id())
+                    .orElseThrow(() -> new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null));
+            M_OP_OPERATOR modifiedEntity = operatorMapper.updateFromRequest(parameter);
+            if (modifiedEntity.getUserId() == null || !modifiedEntity.getUserId().equals(oldEntity.getUserId())) {
+                modifiedEntity.setUserId(oldEntity.getUserId());
             }
-            M_OP_OPERATOR modifiedEntity = operatorMapper.updateFromRequest(parameter, opOperator);
-            operatorRepository.saveAndFlush(modifiedEntity);
+            operatorRepository.save(modifiedEntity);
             return operatorMapper.toModifyResponse(modifiedEntity);
         });
     }
@@ -122,10 +122,8 @@ public class OperatorService {
     public ResponseEntity<ItemResponse<Long>> deleteOperator(OperatorDeleteRequest parameter) throws ServiceException {
         GenerateResponse<Long> generateResponse = new GenerateResponse<>();
         return generateResponse.generateDeleteResponse(() -> {
-            M_OP_OPERATOR opOperator = operatorRepository.findOneByUserId(parameter.userId());
-            if (opOperator != null) {
-                throw new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null);
-            }
+            M_OP_OPERATOR opOperator = operatorRepository.findById(parameter.id())
+                    .orElseThrow(() -> new ServiceException(CommonErrorCode.ENTITY_NOT_FOUND, null));
             operatorRepository.delete(opOperator);
             return 1L;
         });

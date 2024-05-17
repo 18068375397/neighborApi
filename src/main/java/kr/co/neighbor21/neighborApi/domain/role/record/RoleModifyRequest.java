@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import kr.co.neighbor21.neighborApi.common.validation.annotation.ByteSize;
 import kr.co.neighbor21.neighborApi.entity.M_OP_AUTHORITY;
 
+import java.math.BigInteger;
 import java.util.List;
 
 
@@ -12,7 +13,7 @@ import java.util.List;
 public record RoleModifyRequest(
         @Schema(description = "id / int(50)", example = "1")
         @NotNull
-        String id,
+        BigInteger id,
         @Schema(description = "roleId / VARCHAR2(50)", example = "ROLE001")
         @ByteSize(max = 50)
         String roleId,

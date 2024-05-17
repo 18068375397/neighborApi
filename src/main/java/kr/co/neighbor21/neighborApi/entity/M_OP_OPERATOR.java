@@ -23,6 +23,7 @@ import java.util.Objects;
 public class M_OP_OPERATOR extends BaseEntity {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SearchField(columnName = "id")
     private BigInteger id;
 
@@ -71,7 +72,7 @@ public class M_OP_OPERATOR extends BaseEntity {
     private Long passwordUpdateCycle;
 
     @JsonIgnoreProperties(value = {"mOpOperators"})
-    @ManyToMany(targetEntity = ROLE.class, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "USER_ROLE",
             joinColumns = {@JoinColumn(name = "user_id",referencedColumnName = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id",referencedColumnName = "role_id")}

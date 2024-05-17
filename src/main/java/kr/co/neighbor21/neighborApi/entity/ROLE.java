@@ -23,6 +23,7 @@ public class ROLE extends BaseEntity {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SearchField(columnName = "id")
     private int id;
 

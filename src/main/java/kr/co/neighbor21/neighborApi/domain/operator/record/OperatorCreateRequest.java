@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import kr.co.neighbor21.neighborApi.common.util.date.AljjabaegiDate;
 import kr.co.neighbor21.neighborApi.common.validation.annotation.ByteSize;
+import kr.co.neighbor21.neighborApi.entity.ROLE;
+
+import java.util.List;
 
 /**
  * 운영자 추가 요청
@@ -41,7 +44,10 @@ public record OperatorCreateRequest(
         @Schema(description = "Password update date / DATE", hidden = true)
         String passwordUpdateDate,
         @Schema(description = "Password modification cycle / NUMBER(4)", hidden = true)
-        Long passwordUpdateCycle) {
+        Long passwordUpdateCycle,
+        @Schema(description = "roles / List", example = "List")
+        List<ROLE> roles) {
+
     public OperatorCreateRequest {
         modifyDate = AljjabaegiDate.getCurrentDateTimeString();
         password = "$2a$10$5BjKHQv6KGDA5h1N3QKYq.FPtfqegzfcIOFHw8FXEPkrltGVcdk7S";

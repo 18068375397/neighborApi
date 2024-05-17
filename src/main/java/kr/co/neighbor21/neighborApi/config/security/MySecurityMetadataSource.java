@@ -1,9 +1,11 @@
 package kr.co.neighbor21.neighborApi.config.security;
 
 import jakarta.servlet.http.HttpServletRequest;
+import kr.co.neighbor21.neighborApi.domain.authority.AuthorityRepository;
 import kr.co.neighbor21.neighborApi.entity.M_OP_AUTHORITY;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.access.SecurityMetadataSource;
@@ -11,15 +13,15 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 @Slf4j
 @Component
 public class MySecurityMetadataSource implements SecurityMetadataSource {
+
+    @Autowired
+    private AuthorityRepository authorityRepository;
 
     @Getter
     private static final Set<M_OP_AUTHORITY> AUTHORITIES = new HashSet<>();
@@ -27,14 +29,8 @@ public class MySecurityMetadataSource implements SecurityMetadataSource {
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) {
         log.info("---MySecurityMetadataSource---");
-        M_OP_AUTHORITY mOpAuthority = new M_OP_AUTHORITY();
-        mOpAuthority.setAuthorityId("AUTH000001");
-        mOpAuthority.setAuthorityCode("POST:/v1/operator/search");
-        mOpAuthority.setAuthorityName("tt");
-        mOpAuthority.setDescription("test a interface");
-
-
-        AUTHORITIES.add(mOpAuthority);
+        List<M_OP_AUTHORITY> authorities = authorityRepository.findAll();
+        AUTHORITIES.addAll(authorities);
 
         FilterInvocation filterInvocation = (FilterInvocation) object;
         HttpServletRequest request = filterInvocation.getRequest();

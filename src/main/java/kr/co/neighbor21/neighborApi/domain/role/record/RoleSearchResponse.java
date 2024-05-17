@@ -10,8 +10,10 @@ import java.util.List;
 public record RoleSearchResponse(
         @Schema(description = "id / VARCHAR2(50)", example = "1")
         String id,
-        @Schema(description = "name / VARCHAR2(256)", example = "admin")
-        String name,
+        @Schema(description = "roleId / VARCHAR2(50)", example = "ROLE001")
+        String roleId,
+        @Schema(description = "roleName / VARCHAR2(50)", example = "admin")
+        String roleName,
         @Schema(description = "authorities / List", example = "List")
         List<M_OP_AUTHORITY> authorities) {
 }

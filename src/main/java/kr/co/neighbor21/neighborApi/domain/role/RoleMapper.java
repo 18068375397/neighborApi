@@ -12,6 +12,7 @@ import java.util.List;
 public interface RoleMapper {
     RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.SET_TO_NULL)
     RoleSearchResponse toSearchResponse(ROLE entity);
 
     List<RoleSearchResponse> toSearchResponseList(List<ROLE> entity);

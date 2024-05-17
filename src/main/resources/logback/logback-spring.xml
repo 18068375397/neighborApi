@@ -15,8 +15,9 @@
     <springProperty name = "ACTIVE" source= "spring.profiles.active"/>
     <springProperty name = "PROJECT_NAME" source= "project.name"/>
 
-<!--    <property name="LOG_DIR" value="/Users/kimyonghee/Documents/project/base/neighbor-api/${PROJECT_NAME}-${ACTIVE}" />-->
-<!--    # 修改测试地址-->
+    <!--    # 修改测试地址-->
+<!--    <property name="LOG_DIR" value="//usr/local/tomcat/${PROJECT_NAME}-${ACTIVE}" />-->
+    <!--    # 修改个人地址-->
     <property name="LOG_DIR" value="/Users/chengjiawei/IdeaProjects/샘플프로젝트/neighbor-api/${PROJECT_NAME}-${ACTIVE}" />
     <property name="REQUEST_RESPONSE_FILE_NAME" value="${PROJECT_NAME}_request_response" />
     <property name="INFORMATION_FILE_NAME" value="${PROJECT_NAME}_information" />

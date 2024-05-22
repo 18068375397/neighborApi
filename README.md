@@ -1,3 +1,12 @@
+#API neighborApi v1.3.0
+================================
+----
+```
+2024-05-15 version update
+ - Add rbac authority authentication
+```
+
+
 #API 표준 프로젝트 v1.2.0
 ================================
 배포

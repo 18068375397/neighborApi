@@ -1,6 +1,5 @@
 #API neighborApi v1.3.0
 ================================
-----
 ```
 2024-05-15 version update
  - Add rbac authority authentication
